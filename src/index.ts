@@ -1,6 +1,9 @@
 import express from "express";
-import type { Request, Response, NextFunction } from "express";
 import { logger, client } from "./middleware/logger";
+import { ConnectMongodb } from "./mongodb/connect";
+import { MongooseError } from "mongoose"
+
+import type { Request, Response, NextFunction } from "express";
 
 const app = express();
 const PORT = 3000;
@@ -14,8 +17,20 @@ app.get('/', function (req: Request, res: Response) {
 
 app.use(function (req: Request, res: Response) {
   res.status(404).json({ error: `${req.originalUrl} not found` });
-})
-
-app.listen(PORT, ()=> {
-  console.log(`listening to port ${PORT}`);
 });
+
+(async()=>{
+  try {
+    await ConnectMongodb();
+    app.listen(PORT, ()=> {
+      console.log(`listening to port ${PORT}`);
+    });  
+  } catch (error) {
+    if(error instanceof MongooseError) {
+      console.log(error.message);
+      return;
+    }
+    console.log(error);
+  } 
+})();
+
