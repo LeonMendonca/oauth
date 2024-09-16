@@ -9,5 +9,8 @@
         }
       }
     ]
+  ],
+  "plugins": [
+    ["add-import-extension", { extension: "js" }]
   ]
 }
