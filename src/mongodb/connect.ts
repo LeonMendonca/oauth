@@ -1,16 +1,14 @@
 import mongoose from "mongoose";
 
 const database: string = "oauth"
-const uri: string = `mongodb://localhost:27017/${database}`;
+const uri: string = `mongodb://127.0.0.1:27017/${database}`;
 
 async function ConnectMongodb() {
   try {
-    const conn = await mongoose.createConnection(uri, {
+    await mongoose.connect(uri, {
       serverSelectionTimeoutMS: 5000
-    }).asPromise();
-    if(conn.readyState === 1) {
-      console.log("connected to MongoDb", conn.readyState);
-    } 
+    });
+    console.log("Connected to MongoDb");
   } catch (error) {
     throw error;
   }
