@@ -9,9 +9,9 @@ function setToken(payload: Tpayload): string {
   return token;
 }
 
-function getPayload(token: string): JwtPayload | string {
+function getPayload(token: string): Tpayload {
   const payload = jwt.verify(token, secretKey); 
-  return payload;
+  return payload as Tpayload;
 }
 
 export { setToken, getPayload };
