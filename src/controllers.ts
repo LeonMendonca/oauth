@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction  } from "express";
 import { User } from "./mongodb/schema";
 import type { IUser, Tlogin, Tpayload, TSignup } from "./types";
 import { MongooseError } from "mongoose";
-import { setToken } from "./jwt";
+import { getPayload, setToken } from "./jwt";
 
 class Controllers {
   static async createNewUser(req: Request, res: Response, next: NextFunction) {
@@ -40,6 +40,27 @@ class Controllers {
       res.status(200).json({ 
         token: token
       });
+    } catch (error) {
+      if(error instanceof Error || error instanceof MongooseError) {
+        next(error);
+        return;
+      }
+      res.send(400).send("Something went wrong. Bad request");
+    }
+  }
+
+  static async getUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      if(!req.headers['authorization']) {
+        throw new Error('No authorization header');
+      }
+      const token = req.headers.authorization.split(' ')[1];
+      if(!token) {
+        throw new Error('Couldn\'t find auth token');
+      }
+      const payload = getPayload(token);
+      const user = await User.findById(payload._id);
+      res.send(user);
     } catch (error) {
       if(error instanceof Error || error instanceof MongooseError) {
         next(error);
