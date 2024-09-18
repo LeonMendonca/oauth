@@ -5,6 +5,7 @@ import { MongooseError } from "mongoose"
 
 import type { Request, Response, NextFunction } from "express";
 import { userRoute } from "./routes/userAuthRoute";
+import { userGet } from "./routes/userGetRoute";
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +21,7 @@ app.get('/', function (req: Request, res: Response) {
 });
 
 app.use('/auth',userRoute);
+app.use('/', userGet);
 
 app.use(function (req: Request, res: Response) {
   res.status(404).json({ error: `${req.originalUrl} not found` });
