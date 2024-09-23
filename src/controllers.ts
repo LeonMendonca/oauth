@@ -59,8 +59,13 @@ class Controllers {
         throw new Error('Couldn\'t find auth token');
       }
       const payload = getPayload(token);
-      const user = await User.findById(payload._id);
-      res.send(user);
+      //property check
+      if('_id' in payload) {
+        const user = await User.findById(payload._id);
+        res.send(user);
+      } else {
+        throw new Error('Unexpected type');
+      }
     } catch (error) {
       if(error instanceof Error || error instanceof MongooseError) {
         next(error);
