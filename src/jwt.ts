@@ -1,17 +1,18 @@
 import jwt from "jsonwebtoken";
-import type { JwtPayload } from "jsonwebtoken"
-import type { Tpayload } from "./types";
+import type { Tpayload, Tpermission } from "./types";
 
 const secretKey = "12345";
 
-function setToken(payload: Tpayload): string {
+function setToken(payload: Tpayload | Tpermission): string {
   const token = jwt.sign(payload, secretKey);
   return token;
 }
 
-function getPayload(token: string): Tpayload {
+type TPayload = Tpayload | Tpermission;
+
+function getPayload(token: string): TPayload {
   const payload = jwt.verify(token, secretKey); 
-  return payload as Tpayload;
+  return payload as TPayload;
 }
 
 export { setToken, getPayload };
