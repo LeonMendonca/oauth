@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "npx nodemon",
     "start": "node lib/index.js",
     "build": "npx babel -x .ts src/ -d lib/"
   },
