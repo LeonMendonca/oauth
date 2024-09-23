@@ -25,4 +25,12 @@ type Tpayload = {
   email: string;
 }
 
-export type { IUser, TSignup, Tlogin, Tpayload };
+//tagged union
+type Tpermission = {
+  type: 'tpermission',
+  user: string;
+  email: boolean;
+  name: boolean;
+}
+
+export type { IUser, TSignup, Tlogin, Tpayload, Tpermission };
